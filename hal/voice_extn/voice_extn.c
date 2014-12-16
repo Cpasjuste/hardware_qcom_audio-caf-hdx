@@ -427,9 +427,8 @@ int voice_extn_set_parameters(struct audio_device *adev,
     char *str;
     int value;
     int ret = 0, err;
-    char *kv_pairs = str_parms_to_str(parms);
 
-    ALOGV_IF(kv_pairs != NULL, "%s: enter: %s", __func__, kv_pairs);
+    ALOGV("%s: enter: %s", __func__, str_parms_to_str(parms));
 
     err = str_parms_get_int(parms, AUDIO_PARAMETER_KEY_VSID, &value);
     if (err >= 0) {
@@ -459,7 +458,6 @@ int voice_extn_set_parameters(struct audio_device *adev,
 
 done:
     ALOGV("%s: exit with code(%d)", __func__, ret);
-    free(kv_pairs);
     return ret;
 }
 
@@ -487,10 +485,9 @@ void voice_extn_get_parameters(const struct audio_device *adev,
 {
     int ret;
     char value[VOICE_EXTN_PARAMETER_VALUE_MAX_LEN] = {0};
-    char *str = str_parms_to_str(query);
+    char *str = NULL;
 
-    ALOGV_IF(str != NULL, "%s: enter %s", __func__, str);
-    free(str);
+    ALOGV("%s: enter %s", __func__, str_parms_to_str(query));
 
     ret = str_parms_get_str(query, AUDIO_PARAMETER_KEY_AUDIO_MODE, value,
                             sizeof(value));
@@ -510,9 +507,7 @@ void voice_extn_get_parameters(const struct audio_device *adev,
     }
     voice_extn_compress_voip_get_parameters(adev, query, reply);
 
-    str = str_parms_to_str(reply);
-    ALOGV_IF(str != NULL, "%s: exit: returns \"%s\"", __func__, str);
-    free(str);
+    ALOGV("%s: exit: returns \"%s\"", __func__, str_parms_to_str(reply));
 }
 
 void voice_extn_out_get_parameters(struct stream_out *out,
